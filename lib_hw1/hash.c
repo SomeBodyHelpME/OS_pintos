@@ -430,3 +430,22 @@ remove_elem (struct hash *h, struct hash_elem *e)
   list_remove (&e->list_elem);
 }
 
+/*
+ * Prototype : unsigned hash_int_2(int i)
+ * Parameter : integer
+ * Return : hash value of integer i
+ * Function : *
+*/
+unsigned 
+hash_int_2 (int num)
+{
+	unsigned ret = 0;
+	int temp = num;
+	if(temp < 0) temp -= temp;
+	for(temp ; temp > 0; temp = temp / 10)
+		ret += temp % 10;
+
+	return ret;
+}
+
+

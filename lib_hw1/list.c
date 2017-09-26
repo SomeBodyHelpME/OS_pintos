@@ -531,3 +531,99 @@ list_min (struct list *list, list_less_func *less, void *aux)
     }
   return min;
 }
+
+/*
+ * Prototype : void list_swap (struct list_elem *a, struct list_elem *b)
+ * Parameter : 2 elements
+ * Return : None
+ * Function : 2 elements swap
+*/
+void
+list_swap (struct list_elem *a, struct list_elem *b)
+{
+        ASSERT (a && b);
+
+	if(a == b)
+		return;
+	if(a->next == b) {
+		struct list_elem *prev, *next;
+	
+		prev = a->prev;
+		next = b->next;
+
+		a->prev = b;
+		a->next = next;
+		b->prev = prev;
+		b->next = a;
+
+		if(prev) prev->next = b;
+		if(next) next->prev = a;
+	}
+	else if(b->next == a) {
+		struct list_elem *prev, *next;
+
+		prev = b->prev;
+		next = a->next;
+
+		b->prev = a;
+		b->next = next;
+		a->prev = prev;
+		a->next = b;
+
+		if(prev) prev->next = a;
+		if(next) next->prev = b;
+	}
+	else {
+		struct list_elem *prevA, *nextA, *prevB, *nextB;
+		
+		prevA = a->prev;
+		nextA = a->next;
+		prevB = b->prev;
+		nextB = b->next;
+
+		a->prev = prevB;
+		a->next = nextB;
+		b->prev = prevA;
+		b->next = nextA;
+
+		if(prevA) prevA->next = b;
+		if(nextA) nextA->prev = b;
+		if(prevB) prevB->next = a;
+		if(nextB) nextB->prev = a; 
+	}
+}
+
+/*
+
+
+*/
+void
+list_shuffle (struct list *list)
+{
+	size_t count;
+	size_t i;
+
+	ASSERT(list);
+	srand(time(NULL));
+
+	count = list_size(list);
+	
+	for(i = 0 ; i < count ; i++) {
+		struct list_elem *e1 = list_select(list, rand() % count);
+		struct list_elem *e2 = list_select(list, rand() % count);
+		list_swap(e1, e2);
+	}
+}
+
+struct list_elem *
+list_select (struct list *list, size_t n)
+{
+	struct list_elem *e;
+	size_t i;
+
+	for(i = 0 , e = list_begin(list) ; i < n && e != list_end(list) ; i++, e = list_next(e));
+
+	ASSERT(i == n);
+
+	return e;
+} 

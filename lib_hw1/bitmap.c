@@ -374,3 +374,34 @@ bitmap_dump (const struct bitmap *b)
   hex_dump (0, b->bits, byte_cnt (b->bit_cnt)/2, false);
 }
 
+/* Prototype : struct bitmap *bitmap_expand (struct bitmap *bitmap, int size)
+ * Parameter : bitmap, size
+ * Return : bitmap or NULL
+ * Function : expand size
+ */
+struct bitmap *
+bitmap_expand (struct bitmap *b, int i)
+{
+	struct bitmap *bm;
+	size_t oldvalue;
+
+	if(!b)
+		return NULL;
+
+	bm = malloc(sizeof *bm);
+	if(!bm)
+		return NULL;
+
+	oldvalue = bitmap_size(b);
+	bm->bit_cnt = oldvalue + i;
+	bm->bits = realloc(b->bits, byte_cnt(bm->bit_cnt));
+	
+	if(!bm->bits) {
+		free(bm);
+		return NULL;
+	}
+
+	bitmap_set_multiple(bm, oldvalue, i, false);
+	free(b);
+	return bm;
+}
