@@ -56,7 +56,7 @@ void create_func(char *input) {
 	if(strcmp(ds, "list") == 0) {
 		create_list(name);
 	}
-	else if(strcmp(ds, "hash") == 0) {
+	else if(strcmp(ds, "hashtable") == 0) {
 		create_hash(name);
 	}
 	else if(strcmp(ds, "bitmap") == 0) {
